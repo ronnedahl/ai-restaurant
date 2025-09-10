@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to menu items for all users
+    match /menu/{document=**} {
+      allow read: if true;
+      allow write: if false; // Only admin should write
+    }
+    
+    // Allow users to read and write their own orders
+    match /orders/{orderId} {
+      allow read: if true; // For development, later add auth
+      allow create: if true; // For development, later add auth
+      allow update: if true; // For development, later add auth
+    }
+  }
+}
