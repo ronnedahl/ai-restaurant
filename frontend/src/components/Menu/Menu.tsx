@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { mockApi } from '../../services/mockApi';
-import type { MenuData } from '../../services/mockApi';
+import type { MenuData, MenuItem } from '../../services/mockApi';
+import FilterButtons from '../FilterButtons/FilterButtons';
+import MenuItemComponent from '../MenuItem/MenuItem';
 
 const Menu: React.FC = () => {
   const [menuData, setMenuData] = useState<MenuData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   // Hämta menydata när komponenten laddas
   useEffect(() => {
@@ -26,6 +28,41 @@ const Menu: React.FC = () => {
     fetchMenuData();
   }, []);
 
+  // Hantera filter ändringar
+  const handleFilterChange = (filter: string) => {
+    setSelectedFilter(filter);
+  };
+
+  // Hantera lägg till i kundvagn (placeholder för nu)
+  const handleAddToCart = (dish: MenuItem) => {
+    console.log('Adding to cart:', dish.name);
+    // TODO: Implementera kundvagn i Sprint 2
+  };
+
+  // Filtrera rätter baserat på valt filter
+  const getFilteredDishes = () => {
+    if (!menuData) return [];
+
+    if (selectedFilter === 'all') {
+      return menuData.dishes;
+    }
+
+    return menuData.dishes.filter(dish => {
+      switch (selectedFilter) {
+        case 'populärt':
+          return dish.tags.includes('populärt');
+        case 'vegetariskt':
+          return dish.category === 'Vegetariskt' || dish.category === 'Veganskt' || dish.tags.includes('vegetariskt');
+        case 'glutenfritt':
+          return dish.tags.includes('glutenfritt') || dish.allergens.includes('glutenfri');
+        case 'kryddigt':
+          return dish.tags.includes('kryddigt') || dish.tags.includes('mustigt');
+        default:
+          return true;
+      }
+    });
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -44,14 +81,17 @@ const Menu: React.FC = () => {
     );
   }
 
-  // Gruppera rätter per kategori
-  const dishesByCategory = menuData.dishes.reduce((acc, dish) => {
+  // Hämta filtrerade rätter
+  const filteredDishes = getFilteredDishes();
+  
+  // Gruppera filtrerade rätter per kategori
+  const dishesByCategory = filteredDishes.reduce((acc, dish) => {
     if (!acc[dish.category]) {
       acc[dish.category] = [];
     }
     acc[dish.category].push(dish);
     return acc;
-  }, {} as Record<string, typeof menuData.dishes>);
+  }, {} as Record<string, MenuItem[]>);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -64,9 +104,12 @@ const Menu: React.FC = () => {
           </p>
         </div>
 
-        {/* Filter Buttons - kommer snart */}
+        {/* Filter Buttons */}
         <div className="mb-8">
-          {/* FilterButtons component kommer här */}
+          <FilterButtons 
+            selectedFilter={selectedFilter}
+            onFilterChange={handleFilterChange}
+          />
         </div>
 
         {/* Menu Categories and Items */}
@@ -82,26 +125,11 @@ const Menu: React.FC = () => {
               {/* Dishes Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {dishes.map((dish) => (
-                  <div key={dish.id} className="bg-white rounded-lg shadow-sm p-4">
-                    {/* MenuItem component kommer här */}
-                    <div className="flex flex-col sm:flex-row">
-                      <img 
-                        src={dish.imageUrl} 
-                        alt={dish.imageAlt}
-                        className="w-full sm:w-32 h-48 sm:h-32 object-cover rounded-lg"
-                      />
-                      <div className="mt-4 sm:mt-0 sm:ml-4 flex-1">
-                        <h3 className="font-semibold text-lg">{dish.name}</h3>
-                        <p className="text-gray-600 text-sm mt-1 line-clamp-2">{dish.description}</p>
-                        <div className="mt-3 flex justify-between items-center">
-                          <span className="text-xl font-bold">{dish.priceSek} kr</span>
-                          <button className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-green-200 transition-colors">
-                            Lägg till
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <MenuItemComponent 
+                    key={dish.id}
+                    dish={dish}
+                    onAddToCart={handleAddToCart}
+                  />
                 ))}
               </div>
             </div>

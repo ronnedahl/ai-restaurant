@@ -1,6 +1,6 @@
 import React from 'react';
 import { ShoppingCart } from 'lucide-react';
-import { MenuItem as MenuItemType } from '../../services/mockApi';
+import type { MenuItem as MenuItemType } from '../../services/mockApi';
 
 interface MenuItemProps {
   dish: MenuItemType;
