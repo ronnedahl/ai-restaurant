@@ -44,8 +44,8 @@ const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
 
           {/* Right Section: Search, Cart, Profile */}
           <div className="flex items-center space-x-4">
-            {/* Search Bar */}
-            <div className="relative">
+            {/* Search Bar - Hidden on mobile */}
+            <div className="relative hidden md:block">
               <input
                 type="text"
                 placeholder="Search menu..."

@@ -102,7 +102,7 @@ const menuData = {
         {
             "id": "SE-006",
             "name": "Pannkakor med sylt och grädde",
-            "category": "Efterrätt",
+            "category": "Husmanskost",
             "description": "Tunna pannkakor serverade med jordgubbssylt och lättvispad grädde.",
             "ingredients": [
                 {"item": "Vetemjöl", "amount": 2.5, "unit": "dl"},
@@ -221,7 +221,82 @@ const menuData = {
             "imageUrl": "https://firebasestorage.googleapis.com/v0/b/ai-restaurant-97fbe.firebasestorage.app/o/halloumi.png?alt=media&token=a27c4721-7f4a-478b-b319-b9e759adf26d",
             "imageAlt": "Halloumitacos med avokadosalsa och picklad rödlök",
             "tags": ["street-food", "snabbt", "vegetariskt"]
-        }
+        },
+
+        {
+    "id": "SE-013",
+    "name": "Chokladmousse med hallon",
+    "category": "Efterrätt",
+    "description": "Luftig chokladmousse toppad med färska hallon och rivet mörk choklad.",
+    "ingredients": [
+        {"item": "Mörk choklad", "amount": 150, "unit": "g"},
+        {"item": "Grädde", "amount": 3, "unit": "dl"},
+        {"item": "Äggula", "amount": 2, "unit": "st"},
+        {"item": "Hallon", "amount": 100, "unit": "g"}
+    ],
+    "allergens": ["ägg", "laktos"],
+    "priceSek": 95,
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/ai-restaurant-97fbe.firebasestorage.app/o/choklat-mousse.png?alt=media&token=e0f39fbf-fd72-47d7-9e55-41f7957d4e75",
+    "imageAlt": "Chokladmousse i glas med hallon",
+    "tags": ["sött", "dessert", "lyxigt"]
+},
+{
+    "id": "SE-014",
+    "name": "Äppelpaj med vaniljsås",
+    "category": "Efterrätt",
+    "description": "Klassisk äppelpaj med kanel serverad med len vaniljsås.",
+    "ingredients": [
+        {"item": "Äpple", "amount": 4, "unit": "st"},
+        {"item": "Smör", "amount": 100, "unit": "g"},
+        {"item": "Vetemjöl", "amount": 2.5, "unit": "dl"},
+        {"item": "Socker", "amount": 1, "unit": "dl"},
+        {"item": "Kanel", "amount": 1, "unit": "msk"},
+        {"item": "Vaniljsås", "amount": 2, "unit": "dl"}
+    ],
+    "allergens": ["gluten", "laktos"],
+    "priceSek": 89,
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/ai-restaurant-97fbe.firebasestorage.app/o/apple-pie.png?alt=media&token=eaf549c4-e859-4c7f-8d2a-7a37b99e4396",
+    "imageAlt": "Äppelpaj med vaniljsås",
+    "tags": ["klassiker", "sött", "bakverk"]
+},
+{
+    "id": "SE-015",
+    "name": "Vegansk chili sin carne",
+    "category": "Veganskt",
+    "description": "Het och smakrik gryta med svarta bönor, kidneybönor, majs och paprika, serverad med ris.",
+    "ingredients": [
+        {"item": "Svarta bönor", "amount": 200, "unit": "g"},
+        {"item": "Kidneybönor", "amount": 200, "unit": "g"},
+        {"item": "Majs", "amount": 150, "unit": "g"},
+        {"item": "Paprika", "amount": 2, "unit": "st"},
+        {"item": "Krossade tomater", "amount": 400, "unit": "g"},
+        {"item": "Chili", "amount": 1, "unit": "st"}
+    ],
+    "allergens": [],
+    "priceSek": 119,
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/ai-restaurant-97fbe.firebasestorage.app/o/vegan-chili.png?alt=media&token=f1c38640-aa55-497e-8f2d-b1cd8614a04c",
+    "imageAlt": "Vegansk chili sin carne i skål",
+    "tags": ["växtbaserat", "mustigt", "proteinrikt"]
+},
+{
+    "id": "SE-016",
+    "name": "Mediterransk sallad med fetaost",
+    "category": "Sallad",
+    "description": "Fräsch sallad med tomater, gurka, rödlök, oliver och fetaost, toppad med olivolja och oregano.",
+    "ingredients": [
+        {"item": "Tomat", "amount": 3, "unit": "st"},
+        {"item": "Gurka", "amount": 1, "unit": "st"},
+        {"item": "Rödlök", "amount": 1, "unit": "st"},
+        {"item": "Oliver", "amount": 100, "unit": "g"},
+        {"item": "Fetaost", "amount": 150, "unit": "g"},
+        {"item": "Olivolja", "amount": 2, "unit": "msk"}
+    ],
+    "allergens": ["laktos"],
+    "priceSek": 115,
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/ai-restaurant-97fbe.firebasestorage.app/o/meditarransk-salad.png?alt=media&token=20ada8c1-6203-4cee-b39e-1d7358c437d8",
+    "imageAlt": "Mediterransk sallad med fetaost och oliver",
+    "tags": ["fräscht", "vegetariskt", "somrigt"]
+}
     ]
 };
 

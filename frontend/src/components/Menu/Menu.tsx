@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { mockApi, MenuData } from '../../services/mockApi';
+import { mockApi } from '../../services/mockApi';
+import type { MenuData } from '../../services/mockApi';
 
 const Menu: React.FC = () => {
   const [menuData, setMenuData] = useState<MenuData | null>(null);
@@ -79,23 +80,23 @@ const Menu: React.FC = () => {
               </div>
 
               {/* Dishes Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {dishes.map((dish) => (
                   <div key={dish.id} className="bg-white rounded-lg shadow-sm p-4">
                     {/* MenuItem component kommer här */}
-                    <div className="flex">
+                    <div className="flex flex-col sm:flex-row">
                       <img 
                         src={dish.imageUrl} 
                         alt={dish.imageAlt}
-                        className="w-32 h-32 object-cover rounded-lg"
+                        className="w-full sm:w-32 h-48 sm:h-32 object-cover rounded-lg"
                       />
-                      <div className="ml-4 flex-1">
+                      <div className="mt-4 sm:mt-0 sm:ml-4 flex-1">
                         <h3 className="font-semibold text-lg">{dish.name}</h3>
-                        <p className="text-gray-600 text-sm mt-1">{dish.description}</p>
-                        <div className="mt-2 flex justify-between items-end">
-                          <span className="text-xl font-bold">{dish.priceSek} SEK</span>
-                          <button className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-green-200">
-                            Add
+                        <p className="text-gray-600 text-sm mt-1 line-clamp-2">{dish.description}</p>
+                        <div className="mt-3 flex justify-between items-center">
+                          <span className="text-xl font-bold">{dish.priceSek} kr</span>
+                          <button className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-green-200 transition-colors">
+                            Lägg till
                           </button>
                         </div>
                       </div>
