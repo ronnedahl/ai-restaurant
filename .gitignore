@@ -37,6 +37,7 @@ lerna-debug.log*
 .firebase/
 *.log
 .firebaserc
+*-firebase-adminsdk-*.json
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
