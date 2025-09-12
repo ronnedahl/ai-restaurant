@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Search, ShoppingCart, User, Utensils } from 'lucide-react';
+import { useCart } from '../../contexts/CartContext';
 
-interface HeaderProps {
-  cartItemCount?: number;
-}
-
-const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
+const Header: React.FC = () => {
+  const { totalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeNav, setActiveNav] = useState('Menu');
 
@@ -59,9 +57,9 @@ const Header: React.FC<HeaderProps> = ({ cartItemCount = 0 }) => {
             {/* Cart Icon */}
             <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ShoppingCart className="h-6 w-6 text-gray-700" />
-              {cartItemCount > 0 && (
+              {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount}
+                  {totalItems}
                 </span>
               )}
             </button>

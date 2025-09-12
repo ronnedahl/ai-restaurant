@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import type { MenuItem } from '../services/mockApi';
 
 // Types för varukorgen
@@ -39,7 +40,18 @@ interface CartProviderProps {
 
 // CartProvider component
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+  // Initiera state från localStorage om det finns
+  const [items, setItems] = useState<CartItem[]>(() => {
+    try {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        return JSON.parse(savedCart);
+      }
+    } catch (error) {
+      console.error('Failed to load cart from localStorage:', error);
+    }
+    return [];
+  });
 
   // Beräkna totalt belopp
   const totalAmount = items.reduce((total, item) => {
@@ -113,18 +125,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       console.error('Failed to save cart to localStorage:', error);
     }
   }, [items]);
-
-  // Ladda varukorgen från localStorage när komponenten mountas
-  useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        setItems(JSON.parse(savedCart));
-      }
-    } catch (error) {
-      console.error('Failed to load cart from localStorage:', error);
-    }
-  }, []);
 
   const contextValue: CartContextType = {
     items,
