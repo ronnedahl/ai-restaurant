@@ -3,12 +3,16 @@ import { mockApi } from '../../services/mockApi';
 import type { MenuData, MenuItem } from '../../services/mockApi';
 import FilterButtons from '../FilterButtons/FilterButtons';
 import MenuItemComponent from '../MenuItem/MenuItem';
+import { useCart } from '../../contexts/CartContext';
 
 const Menu: React.FC = () => {
   const [menuData, setMenuData] = useState<MenuData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState('all');
+  
+  // Använd CartContext
+  const { addToCart } = useCart();
 
   // Hämta menydata när komponenten laddas
   useEffect(() => {
@@ -33,10 +37,10 @@ const Menu: React.FC = () => {
     setSelectedFilter(filter);
   };
 
-  // Hantera lägg till i kundvagn (placeholder för nu)
+  // Hantera lägg till i kundvagn
   const handleAddToCart = (dish: MenuItem) => {
-    console.log('Adding to cart:', dish.name);
-    // TODO: Implementera kundvagn i Sprint 2
+    addToCart(dish);
+    console.log(`Added ${dish.name} to cart`);
   };
 
   // Filtrera rätter baserat på valt filter
