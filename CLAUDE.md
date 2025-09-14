@@ -1,104 +1,127 @@
-# CLAUDE.md
+CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Denna fil ger vägledning till Claude Code (claude.ai/code) när du arbetar med kod i detta repository.
+Project Overview
 
-## Project Overview
+Projektidé: AI-meny & beställningsassistent för en restaurangwebbplats.
 
-AI-powered restaurant menu & ordering assistant - A live widget (web/PWA) where users can:
-- Ask questions about dishes, allergens, and daily specials
-- Get personalized recommendations ("gluten-free under 120 SEK, preferably fish")
-- Add items to cart via AI calls (tool-calls)
-- Check order status
-- Escalate to human support when needed
+Ett live-widget (webb/PWA) där användaren kan:
 
-## Development Workflow
+    Ställa frågor om rätter, allergener och dagens rätt.
 
-**Core Principle**: Build this application branch by branch in small, manageable steps. Work as a guide for a junior developer, breaking down problems into minimal parts.
+    Få personliga rekommendationer (“glutenfritt under 120 kr, gärna fisk”).
 
-**Step-by-step workflow**:
-1. Developer defines the goal (creates new Git branch and states the objective)
-2. Suggest the first small, logical step
-3. Wait for approval ("Yes" or "Okay")
-4. Write code for ONLY that single step
-5. Immediately suggest the next small step
-6. Repeat until branch goal is achieved
+    Lägga varor i varukorg via AI-anrop (tool-calls).
 
-**Main Rule**: Never write all code at once. Guide one step at a time.
+    Kolla beställningsstatus (“var är min order?”).
 
-## Essential Commands
+    Eskalera till en människa vid behov.
 
-```bash
-# Frontend Development (in /frontend folder)
-npm install      # Install frontend dependencies
-npm run dev      # Start development server on http://localhost:5173
-npm run build    # Build for production
-npm run lint     # Run linting
+Grundprincip: Vi bygger denna applikation gren för gren, i en serie av små, hanterbara steg. Jag är en junior utvecklare och behöver att du agerar som min guide och bryter ner problem i minsta möjliga delar.
 
-# Mock Server (in /frontend folder)
-npm run mock:server # Start local mock API server to simulate backend
+## Our Workflow:
 
-# Backend Development (in /functions folder)
-npm install      # Install backend dependencies
-npm run serve    # Build and start Firebase emulators
-firebase emulators:start # Start local Firebase emulator
+    Jag definierar målet: Jag börjar med att skapa en ny Git-gren och berättar för dig det övergripande målet för den specifika grenen.
+
+    Du föreslår det första steget: Du föreslår sedan det allra första, lilla och logiska steget för att uppnå målet.
+
+    Jag godkänner: Jag säger "Ja" eller "Okej" för att godkänna ditt förslag.
+
+    Du skriver koden: När jag har godkänt, ger du mig koden för endast det enskilda steget.
+
+    Du föreslår nästa steg: Efter att ha skrivit koden, föreslår du omedelbart nästa lilla steg.
+
+    Vi upprepar: Vi fortsätter denna loop tills målet för grenen är uppfyllt.
+
+## Huvudregel: 
+
+Skriv inte all kod på en gång. Din roll är att guida mig ett steg i taget. Jag meddelar dig när målet för grenen är uppnått.
+The Slice Plan (Our Project Roadmap)
+
+Här är den övergripande planen vi kommer att följa, slice för slice. Varje slice kommer att ha sin egen Git-gren.
+
+    Slice 0: Projektets Grundstomme. Sätta upp Git, Firebase (Firestore, Functions, Hosting) och en minimal React-app. Installera och konfigurera shadcn/ui.
+
+    Slice 1: Visa en Statisk Meny. Skapa menysidan som hämtar och visar data från vår Mock API Server. Bygg UI med shadcn/ui-komponenter.
+
+    Slice 2: Grundläggande Varukorgsfunktion. Implementera CartContext och koppla "Add"-knapparna.
+
+    Slice 3: Bygg Varukorgsvyn. Skapa sidan som visar innehållet från CartContext med shadcn/ui-komponenter.
+
+    Slice 4: AI-assistentens Gränssnitt (UI). Bygga ett chattfönster med shadcn/ui-komponenter.
+
+    Slice 5: Koppla på AI för Frågor & Svar. Byt ut anropen från Mock API Server till den riktiga Firebase Cloud Function.
+
+Essential Commands
+code Bash
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
+
+    
+# Frontend Development (i /frontend mappen)
+npm install      # Installera frontend-beroenden
+npm run dev      # Starta utvecklingsserver för frontend på http://localhost:5173
+
+## NYTT/UPPDATERAT ##
+# Mock Server (i /frontend mappen)
+npm run mock:server # Starta den lokala mock-API-servern för att simulera backend
+
+# Backend Development (i /functions mappen)
+npm install      # Installera backend-beroenden
+firebase emulators:start # Starta lokal Firebase-emulator
 
 # Deployment
 firebase deploy
-```
 
-## Architecture
+  
 
-**Technology Stack**:
-- Frontend: React with Vite & TypeScript
-- Backend: Node.js Firebase Cloud Functions
-- Database: Firestore (NoSQL)
-- Hosting: Firebase Hosting
-- Styling: Tailwind CSS v4
-- UI Components: shadcn/ui (Radix UI + Tailwind)
-- AI Integration: Google Gemini API (or similar)
+Architecture Overview
+Technology Stack
 
-**Project Structure**:
-```
-/frontend        # React application
-  /src
-    /config      # Firebase configuration
-    /lib         # Utilities (shadcn utils)
-    /assets      # Static assets
-/functions       # Firebase Cloud Functions
-```
+    Frontend: React (med Vite) & TypeScript
 
-**Path Aliases**:
-- `@/` → `/frontend/src/`
-- `@/components` → UI components
-- `@/lib` → Utilities
-- `@/ui` → shadcn/ui components
+    Backend: Node.js i Firebase Cloud Functions
 
-## Development Slice Plan
+    Databas: Firestore (NoSQL-databas)
 
-**Slice 0**: Project Foundation - Git, Firebase (Firestore, Functions, Hosting), minimal React app, shadcn/ui setup
+    Hosting: Firebase Hosting
 
-**Slice 1**: Static Menu Display - Menu page fetching data from Mock API Server, UI with shadcn/ui
+    Styling: Tailwind CSS
 
-**Slice 2**: Basic Cart Functionality - CartContext implementation, connect "Add" buttons
+## NYTT/UPPDATERAT ##
 
-**Slice 3**: Cart View - Display CartContext content with shadcn/ui components
+    UI Components: shadcn/ui (byggt på Radix UI & Tailwind CSS). Vi kommer att använda detta för alla UI-element som knappar, dialogrutor och kort.
 
-**Slice 4**: AI Assistant UI - Chat window with shadcn/ui components
+    AI Integration: Google Gemini API (eller liknande)
 
-**Slice 5**: AI Integration - Replace Mock API calls with real Firebase Cloud Functions
+Core Architecture Patterns
 
-## Key Implementation Patterns
+    Backend as an API: Firebase Cloud Functions fungerar som våra serverlösa API-endpoints.
 
-**State Management**: React Context API for global state
-- `CartContext`: Manages cart products, quantities, total price
+    UI First with Shadcn: Vi kommer att prioritera att bygga gränssnittet med färdiga, anpassningsbara komponenter från shadcn/ui för att säkerställa ett konsekvent, tillgängligt och professionellt utseende från grunden.
 
-**Development Approach**:
-- Mock Server for frontend development (Slice 1-4) - simulate API responses independently of backend
-- UI First with shadcn/ui - prioritize building with ready-made, customizable components
-- Environment variables in `.env` for Firebase configuration
-- Firebase Emulator Suite for local backend testing (later slices)
+## NYTT/UPPDATERAT ##
 
-**Code Standards**:
-- Modular, maintainable code
-- Use shadcn/ui components wherever possible
-- TypeScript for type safety
+    State Management & Application Contexts:
+
+        Vi använder React Context API för att hantera global state. Varje "domän" får sin egen context.
+
+        CartContext.jsx: Hanterar alla aspekter av varukorgen: produkter, antal, totalpris och funktioner för att ändra den.
+
+        (När appen växer kan vi lägga till fler contexts, t.ex. AuthContext eller UserPreferencesContext).
+
+Key Implementation Details
+
+    Projektstruktur: En monorepo-liknande struktur med separata mappar för frontend och functions.
+
+Development Considerations
+
+## NYTT/UPPDATERAT ##
+
+    Mock Server for Frontend Development: För att kunna utveckla frontenden snabbt och oberoende av den riktiga backenden (Firebase Functions) ska vi använda en lokal mock-server (t.ex. med json-server eller msw). Denna server kommer att simulera API-svaren från getMenu och andra endpoints. Detta är vår primära datakälla under Slice 1-4.
+
+    Environment Variables: En .env-fil i /frontend kommer att användas för Firebase-konfiguration. Känsliga nycklar hanteras säkert i Cloud Functions.
+
+    Firebase Emulator Suite: Används senare i projektet för att testa den riktiga backend-integrationen lokalt.
+
+    Kodning: Koden ska vara modulär, lätt att underhålla och felsöka. Använd shadcn/ui-komponenter där det är möjligt.
