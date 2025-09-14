@@ -1,96 +1,69 @@
-import React, { useState } from 'react';
-import { Search, ShoppingCart, User, Utensils } from 'lucide-react';
+import React from 'react';
+import { ShoppingCart, Zap } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
+import Woman from '../../assets/woman.png'
 
 const Header: React.FC = () => {
   const { totalItems } = useCart();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeNav, setActiveNav] = useState('Menu');
 
-  const navItems = ['Menu', 'Order History', 'Favorites'];
+  const handleCartClick = () => {
+    // TODO: Navigate to cart page
+    console.log('Navigate to cart');
+  };
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200">
+    <header className="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo Section */}
-          <div className="flex items-center">
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <Utensils className="h-8 w-8 text-green-600" />
+          
+          {/* Left Section - Logo */}
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              {/* Green diamond/square rotated 45 degrees */}
+              <div className="w-8 h-8 bg-[#50D178] transform rotate-45 flex items-center justify-center">
+                <Zap className="w-4 h-4 text-white transform -rotate-45" />
               </div>
-              <span className="text-2xl font-bold text-gray-900">Foodie</span>
             </div>
-
-            {/* Navigation Links */}
-            <nav className="hidden md:flex ml-10 space-x-8">
-              {navItems.map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setActiveNav(item)}
-                  className={`${
-                    activeNav === item
-                      ? 'text-gray-900 font-semibold'
-                      : 'text-gray-500 hover:text-gray-700'
-                  } transition-colors duration-200`}
-                >
-                  {item}
-                </button>
-              ))}
-            </nav>
+            <span className="text-2xl font-bold text-[#333333]">Foodie</span>
           </div>
 
-          {/* Right Section: Search, Cart, Profile */}
-          <div className="flex items-center space-x-4">
-            {/* Search Bar - Hidden on mobile */}
-            <div className="relative hidden md:block">
-              <input
-                type="text"
-                placeholder="Search menu..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-64 pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white transition-all"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            </div>
+          {/* Center Section - Navigation */}
+          <nav className="hidden md:flex space-x-8">
+            <button className="text-[#718096] hover:text-[#333333] transition-colors">
+              Menu
+            </button>
+            <button className="text-[#718096] hover:text-[#333333] transition-colors">
+              Deals
+            </button>
+            <button className="text-[#718096] hover:text-[#333333] transition-colors">
+              Rewards
+            </button>
+          </nav>
 
-            {/* Cart Icon */}
-            <button className="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
-              <ShoppingCart className="h-6 w-6 text-gray-700" />
+          {/* Right Section - Cart and Avatar */}
+          <div className="flex items-center space-x-4">
+            
+            {/* Cart Button */}
+            <button 
+              onClick={handleCartClick}
+              className="flex items-center space-x-2 bg-[#EDF2F7] hover:bg-[#E2E8F0] px-4 py-2 rounded-lg transition-colors"
+            >
+              <span className="text-[#333333] font-medium">Cart</span>
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {totalItems}
-                </span>
+                <span className="text-[#333333]">({totalItems})</span>
               )}
             </button>
 
-            {/* User Profile */}
-            <button className="p-1 hover:ring-2 hover:ring-gray-300 rounded-full transition-all">
-              <div className="h-8 w-8 bg-gray-300 rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-gray-600" />
-              </div>
-            </button>
+            {/* Avatar */}
+            <div className="w-10 h-10 rounded-full overflow-hidden">
+              <img
+                src={Woman}
+                alt="User profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         </div>
-
-        {/* Mobile Navigation - Hidden by default */}
-        <nav className="md:hidden pb-4">
-          <div className="flex space-x-4">
-            {navItems.map((item) => (
-              <button
-                key={item}
-                onClick={() => setActiveNav(item)}
-                className={`${
-                  activeNav === item
-                    ? 'text-gray-900 font-semibold border-b-2 border-green-500'
-                    : 'text-gray-500'
-                } pb-2 text-sm`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </nav>
       </div>
     </header>
   );
