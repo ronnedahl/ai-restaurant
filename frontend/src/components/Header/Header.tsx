@@ -1,14 +1,19 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Zap } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import Woman from '../../assets/woman.png'
 
 const Header: React.FC = () => {
   const { totalItems } = useCart();
+  const navigate = useNavigate();
 
   const handleCartClick = () => {
-    // TODO: Navigate to cart page
-    console.log('Navigate to cart');
+    navigate('/cart');
+  };
+
+  const handleLogoClick = () => {
+    navigate('/');
   };
 
   return (
@@ -17,7 +22,10 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           
           {/* Left Section - Logo */}
-          <div className="flex items-center space-x-3">
+          <button 
+            onClick={handleLogoClick}
+            className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+          >
             <div className="relative">
               {/* Green diamond/square rotated 45 degrees */}
               <div className="w-8 h-8 bg-[#50D178] transform rotate-45 flex items-center justify-center">
@@ -25,7 +33,7 @@ const Header: React.FC = () => {
               </div>
             </div>
             <span className="text-2xl font-bold text-[#333333]">Foodie</span>
-          </div>
+          </button>
 
           {/* Center Section - Navigation */}
           <nav className="hidden md:flex space-x-8">
