@@ -3,7 +3,7 @@
 # =============================================================================
 # STAGE 1: Builder - Bygger applikationen
 # =============================================================================
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Sätt arbetskatalog
 WORKDIR /app
@@ -50,7 +50,7 @@ CMD ["nginx", "-g", "daemon off;"]
 # =============================================================================
 # STAGE 3: Development - För utvecklingsmiljö med hot reload
 # =============================================================================
-FROM node:18-alpine AS development
+FROM node:20-alpine AS development
 
 # Sätt arbetskatalog
 WORKDIR /app

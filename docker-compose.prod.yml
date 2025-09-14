@@ -1,0 +1,65 @@
+# Docker Compose för produktionsmiljö
+version: '3.8'
+
+services:
+  # Frontend produktionsserver med Nginx
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: ai-restaurant-frontend-prod
+    restart: unless-stopped
+    networks:
+      - ai-restaurant-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Nginx reverse proxy och load balancer
+  nginx:
+    image: nginx:alpine
+    container_name: ai-restaurant-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - nginx-logs:/var/log/nginx
+      # För SSL certifikat (framtida användning)
+      # - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+    networks:
+      - ai-restaurant-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Placeholder för backend (Firebase Functions i produktion körs i molnet)
+  # backend:
+  #   build:
+  #     context: ./functions
+  #     dockerfile: Dockerfile
+  #   container_name: ai-restaurant-backend-prod
+  #   networks:
+  #     - ai-restaurant-network
+  #   restart: unless-stopped
+  #   environment:
+  #     - NODE_ENV=production
+
+networks:
+  ai-restaurant-network:
+    driver: bridge
+    name: ai-restaurant-network
+
+volumes:
+  nginx-logs:
+    name: ai-restaurant-nginx-logs
