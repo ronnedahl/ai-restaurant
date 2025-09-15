@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import Woman from '../../assets/woman.png'
 
