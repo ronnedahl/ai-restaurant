@@ -5,6 +5,7 @@ Project Overview
 
 Projektidé: AI-meny & beställningsassistent för en restaurangwebbplats.
 
+
 Ett live-widget (webb/PWA) där användaren kan:
 
     Ställa frågor om rätter, allergener och dagens rätt.
@@ -72,6 +73,48 @@ firebase emulators:start # Starta lokal Firebase-emulator
 
 # Deployment
 firebase deploy
+=======
+AI-powered restaurant menu & ordering assistant - A React/Firebase application where users can browse dishes, manage cart, and interact with an AI assistant for personalized recommendations and ordering support.
+
+## Essential Commands
+
+### Frontend Development
+```bash
+cd frontend
+npm install          # Install dependencies
+npm run dev          # Start dev server (http://localhost:5173)
+npm run build        # Build for production
+npm run lint         # Run ESLint
+npm run preview      # Preview production build
+```
+
+### Backend Development (Firebase Functions)
+```bash
+cd functions
+npm install          # Install dependencies
+npm run build        # Compile TypeScript
+npm run serve        # Build and start Firebase emulators
+npm run deploy       # Deploy to Firebase (requires auth)
+firebase emulators:start  # Start local Firebase emulator
+```
+
+### Data Management
+```bash
+cd scripts
+npm install          # Install script dependencies
+npm run upload       # Upload menu data to Firestore
+npm run delete       # Delete menu data from Firestore
+```
+
+### Docker Development
+```bash
+# Development environment with hot reload
+docker-compose -f docker-compose.dev.yml up frontend-dev
+
+# Production test environment with Nginx
+docker-compose -f docker-compose.prod.yml up --build
+```
+ 
 
   
 
@@ -98,30 +141,4 @@ Core Architecture Patterns
 
     Backend as an API: Firebase Cloud Functions fungerar som våra serverlösa API-endpoints.
 
-    UI First with Shadcn: Vi kommer att prioritera att bygga gränssnittet med färdiga, anpassningsbara komponenter från shadcn/ui för att säkerställa ett konsekvent, tillgängligt och professionellt utseende från grunden.
 
-## NYTT/UPPDATERAT ##
-
-    State Management & Application Contexts:
-
-        Vi använder React Context API för att hantera global state. Varje "domän" får sin egen context.
-
-        CartContext.jsx: Hanterar alla aspekter av varukorgen: produkter, antal, totalpris och funktioner för att ändra den.
-
-        (När appen växer kan vi lägga till fler contexts, t.ex. AuthContext eller UserPreferencesContext).
-
-Key Implementation Details
-
-    Projektstruktur: En monorepo-liknande struktur med separata mappar för frontend och functions.
-
-Development Considerations
-
-## NYTT/UPPDATERAT ##
-
-    Mock Server for Frontend Development: För att kunna utveckla frontenden snabbt och oberoende av den riktiga backenden (Firebase Functions) ska vi använda en lokal mock-server (t.ex. med json-server eller msw). Denna server kommer att simulera API-svaren från getMenu och andra endpoints. Detta är vår primära datakälla under Slice 1-4.
-
-    Environment Variables: En .env-fil i /frontend kommer att användas för Firebase-konfiguration. Känsliga nycklar hanteras säkert i Cloud Functions.
-
-    Firebase Emulator Suite: Används senare i projektet för att testa den riktiga backend-integrationen lokalt.
-
-    Kodning: Koden ska vara modulär, lätt att underhålla och felsöka. Använd shadcn/ui-komponenter där det är möjligt.
