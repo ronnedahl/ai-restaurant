@@ -1,9 +1,79 @@
-# CLAUDE.md
+CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Denna fil ger vägledning till Claude Code (claude.ai/code) när du arbetar med kod i detta repository.
+Project Overview
 
-## Project Overview
+Projektidé: AI-meny & beställningsassistent för en restaurangwebbplats.
 
+
+Ett live-widget (webb/PWA) där användaren kan:
+
+    Ställa frågor om rätter, allergener och dagens rätt.
+
+    Få personliga rekommendationer (“glutenfritt under 120 kr, gärna fisk”).
+
+    Lägga varor i varukorg via AI-anrop (tool-calls).
+
+    Kolla beställningsstatus (“var är min order?”).
+
+    Eskalera till en människa vid behov.
+
+Grundprincip: Vi bygger denna applikation gren för gren, i en serie av små, hanterbara steg. Jag är en junior utvecklare och behöver att du agerar som min guide och bryter ner problem i minsta möjliga delar.
+
+## Our Workflow:
+
+    Jag definierar målet: Jag börjar med att skapa en ny Git-gren och berättar för dig det övergripande målet för den specifika grenen.
+
+    Du föreslår det första steget: Du föreslår sedan det allra första, lilla och logiska steget för att uppnå målet.
+
+    Jag godkänner: Jag säger "Ja" eller "Okej" för att godkänna ditt förslag.
+
+    Du skriver koden: När jag har godkänt, ger du mig koden för endast det enskilda steget.
+
+    Du föreslår nästa steg: Efter att ha skrivit koden, föreslår du omedelbart nästa lilla steg.
+
+    Vi upprepar: Vi fortsätter denna loop tills målet för grenen är uppfyllt.
+
+## Huvudregel: 
+
+Skriv inte all kod på en gång. Din roll är att guida mig ett steg i taget. Jag meddelar dig när målet för grenen är uppnått.
+The Slice Plan (Our Project Roadmap)
+
+Här är den övergripande planen vi kommer att följa, slice för slice. Varje slice kommer att ha sin egen Git-gren.
+
+    Slice 0: Projektets Grundstomme. Sätta upp Git, Firebase (Firestore, Functions, Hosting) och en minimal React-app. Installera och konfigurera shadcn/ui.
+
+    Slice 1: Visa en Statisk Meny. Skapa menysidan som hämtar och visar data från vår Mock API Server. Bygg UI med shadcn/ui-komponenter.
+
+    Slice 2: Grundläggande Varukorgsfunktion. Implementera CartContext och koppla "Add"-knapparna.
+
+    Slice 3: Bygg Varukorgsvyn. Skapa sidan som visar innehållet från CartContext med shadcn/ui-komponenter.
+
+    Slice 4: AI-assistentens Gränssnitt (UI). Bygga ett chattfönster med shadcn/ui-komponenter.
+
+    Slice 5: Koppla på AI för Frågor & Svar. Byt ut anropen från Mock API Server till den riktiga Firebase Cloud Function.
+
+Essential Commands
+code Bash
+IGNORE_WHEN_COPYING_START
+IGNORE_WHEN_COPYING_END
+
+    
+# Frontend Development (i /frontend mappen)
+npm install      # Installera frontend-beroenden
+npm run dev      # Starta utvecklingsserver för frontend på http://localhost:5173
+
+## NYTT/UPPDATERAT ##
+# Mock Server (i /frontend mappen)
+npm run mock:server # Starta den lokala mock-API-servern för att simulera backend
+
+# Backend Development (i /functions mappen)
+npm install      # Installera backend-beroenden
+firebase emulators:start # Starta lokal Firebase-emulator
+
+# Deployment
+firebase deploy
+=======
 AI-powered restaurant menu & ordering assistant - A React/Firebase application where users can browse dishes, manage cart, and interact with an AI assistant for personalized recommendations and ordering support.
 
 ## Essential Commands
@@ -44,103 +114,31 @@ docker-compose -f docker-compose.dev.yml up frontend-dev
 # Production test environment with Nginx
 docker-compose -f docker-compose.prod.yml up --build
 ```
+ 
 
-## Architecture
+  
 
-### Technology Stack
-- **Frontend**: React 19 with Vite, TypeScript, Tailwind CSS v4
-- **UI Components**: shadcn/ui (Radix UI + Tailwind)
-- **Backend**: Firebase (Cloud Functions, Firestore, Hosting)
-- **Containerization**: Docker multi-stage builds with Nginx for production
+Architecture Overview
+Technology Stack
 
-### Project Structure
-```
-/frontend           # React application
-  /src
-    /components     # React components (Menu, Cart, Header, etc.)
-    /contexts       # React Context providers (CartContext)
-    /services       # API services (mockApi.ts)
-    /config         # Firebase configuration
-    /lib            # Utilities (cn helper for Tailwind)
-  Dockerfile        # Multi-stage Docker build
-  nginx.conf        # Nginx configuration for SPA routing
+    Frontend: React (med Vite) & TypeScript
 
-/functions          # Firebase Cloud Functions (TypeScript)
-  /src              # Function source files
-  /lib              # Compiled JavaScript output
+    Backend: Node.js i Firebase Cloud Functions
 
-/scripts            # Utility scripts
-  uploadMenu.js     # Script to populate Firestore with menu data
-  /data             # Menu data files
-```
+    Databas: Firestore (NoSQL-databas)
 
-### Path Aliases
-- `@/` → `/frontend/src/`
-- Used in imports like: `import { cn } from "@/lib/utils"`
+    Hosting: Firebase Hosting
 
-## Development Workflow
+    Styling: Tailwind CSS
 
-### State Management
-- **CartContext**: Global cart state using React Context API
-  - Manages products, quantities, total price
-  - Provides add/remove/update operations
+## NYTT/UPPDATERAT ##
 
-### Mock API Development
-The `mockApi.ts` service simulates Firebase operations for frontend development:
-- `getMenuData()`: Returns complete menu with dishes
-- `getMenuItem(id)`: Returns specific dish
-- `getMenuByCategory(category)`: Returns filtered dishes
-- `getCategories()`: Returns unique categories
+    UI Components: shadcn/ui (byggt på Radix UI & Tailwind CSS). Vi kommer att använda detta för alla UI-element som knappar, dialogrutor och kort.
 
-### Data Model
-```typescript
-interface MenuItem {
-  id: string
-  name: string
-  category: string
-  description: string
-  ingredients: Ingredient[]
-  allergens: string[]
-  priceSek: number
-  imageUrl: string
-  imageAlt: string
-  tags: string[]
-}
+    AI Integration: Google Gemini API (eller liknande)
 
-interface Ingredient {
-  item: string
-  amount: number
-  unit: string
-}
-```
+Core Architecture Patterns
 
-## Docker Configuration
+    Backend as an API: Firebase Cloud Functions fungerar som våra serverlösa API-endpoints.
 
-### Development Container
-- Uses Node 18 Alpine base
-- Mounts source code as volume for hot reload
-- Exposes port 5173 for Vite dev server
-- Target: `development` in Dockerfile
 
-### Production Container
-- Multi-stage build: Builder → Nginx
-- Serves static files from `/usr/share/nginx/html`
-- Custom `nginx.conf` for SPA routing (try_files directive)
-- Health checks configured
-- Target: `production` in Dockerfile
-
-## Current Development Status
-
-### Implemented Features
-- Static menu display with mock data
-- Cart functionality with Context API
-- Responsive UI with Tailwind CSS v4
-- Docker environments for dev and production
-
-### Pending Implementation
-- AI Assistant UI (Chat window)
-- Firebase Cloud Functions integration
-- Real-time Firestore connection
-- Authentication system
-- Order management
-- Payment integration

@@ -98,7 +98,7 @@ const Menu: React.FC = () => {
   }, {} as Record<string, MenuItem[]>);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F7F9FC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Menu Header */}
         <div className="py-8">
