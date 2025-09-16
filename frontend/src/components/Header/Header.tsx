@@ -1,10 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap } from 'lucide-react';
+import { Zap, MessageCircle } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import Woman from '../../assets/woman.png'
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onOpenAI?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onOpenAI }) => {
   const { totalItems } = useCart();
   const navigate = useNavigate();
 
@@ -14,6 +18,10 @@ const Header: React.FC = () => {
 
   const handleLogoClick = () => {
     navigate('/');
+  };
+
+  const handleAIClick = () => {
+    onOpenAI?.();
   };
 
   return (
@@ -48,8 +56,17 @@ const Header: React.FC = () => {
             </button>
           </nav>
 
-          {/* Right Section - Cart and Avatar */}
+          {/* Right Section - AI Assistant, Cart and Avatar */}
           <div className="flex items-center space-x-4">
+            
+            {/* AI Assistant Button */}
+            <button 
+              onClick={handleAIClick}
+              className="flex items-center justify-center w-10 h-10 bg-[#10B981] hover:bg-[#0EA570] rounded-full transition-colors"
+              aria-label="Open AI Assistant"
+            >
+              <MessageCircle className="w-5 h-5 text-white" />
+            </button>
             
             {/* Cart Button */}
             <button 
