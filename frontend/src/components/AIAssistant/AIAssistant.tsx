@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Sparkles } from 'lucide-react';
+import { X, Send, Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import { chatApi, type ChatRequest } from '../../services/chatApi';
 
 interface Message {
   id: string;
   role: 'assistant' | 'user';
   content: string;
   timestamp: Date;
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
 interface AIAssistantProps {
@@ -36,6 +39,8 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose }) => {
   ]);
   
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [conversationId] = useState(`conv_${Date.now()}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages are added
@@ -43,28 +48,57 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSendMessage = () => {
-    if (inputValue.trim()) {
+  const handleSendMessage = async () => {
+    if (inputValue.trim() && !isLoading) {
+      const userMessage = inputValue.trim();
       const newUserMessage: Message = {
         id: Date.now().toString(),
         role: 'user',
-        content: inputValue,
+        content: userMessage,
         timestamp: new Date()
       };
       
+      // Add user message
       setMessages(prev => [...prev, newUserMessage]);
       setInputValue('');
-      
-      // TODO: Implement AI response logic
-      setTimeout(() => {
+      setIsLoading(true);
+
+      try {
+        // Prepare chat request
+        const chatRequest: ChatRequest = {
+          query: userMessage,
+          conversation_id: conversationId,
+          user_id: 'frontend_user',
+        };
+
+        // Call the chat API
+        const response = await chatApi.sendMessage(chatRequest);
+
+        // Add AI response
         const aiResponse: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: "I'm processing your request. This feature will be connected to the AI backend in the next sprint!",
+          content: response.response,
           timestamp: new Date()
         };
+        
         setMessages(prev => [...prev, aiResponse]);
-      }, 1000);
+      } catch (error) {
+        console.error('Failed to send message:', error);
+        
+        // Add error message
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: "I'm sorry, I'm having trouble connecting to our service right now. Please try again in a moment, or feel free to contact our staff directly.",
+          timestamp: new Date(),
+          isError: true
+        };
+        
+        setMessages(prev => [...prev, errorMessage]);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -133,12 +167,28 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose }) => {
                 </div>
                 <div className={`rounded-lg p-3 ${
                   message.role === 'assistant' 
-                    ? 'bg-[#F3F4F6]' 
+                    ? message.isError 
+                      ? 'bg-red-50 border border-red-200' 
+                      : 'bg-[#F3F4F6]'
                     : 'bg-blue-100'
                 }`}>
-                  <p className="text-sm text-gray-800">
-                    {message.content}
-                  </p>
+                  {message.isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
+                      <span className="text-sm text-gray-600">Thinking...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-start gap-2">
+                      {message.isError && (
+                        <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                      )}
+                      <p className={`text-sm ${
+                        message.isError ? 'text-red-700' : 'text-gray-800'
+                      }`}>
+                        {message.content}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -159,10 +209,19 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose }) => {
             />
             <button
               onClick={handleSendMessage}
-              className="ml-2 w-8 h-8 bg-[#10B981] hover:bg-[#0EA570] rounded-full flex items-center justify-center transition-colors"
+              disabled={isLoading || !inputValue.trim()}
+              className={`ml-2 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                isLoading || !inputValue.trim()
+                  ? 'bg-gray-300 cursor-not-allowed'
+                  : 'bg-[#10B981] hover:bg-[#0EA570]'
+              }`}
               aria-label="Send message"
             >
-              <Send className="w-4 h-4 text-white" />
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 text-white animate-spin" />
+              ) : (
+                <Send className="w-4 h-4 text-white" />
+              )}
             </button>
           </div>
         </div>
