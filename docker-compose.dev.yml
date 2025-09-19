@@ -27,14 +27,14 @@ services:
   # Placeholder för backend (Firebase Functions emulator)
   # backend-dev:
   #   build:
-  #     context: ./functions
+  #     context: ./backend
   #     dockerfile: Dockerfile.dev
   #   container_name: ai-restaurant-backend-dev
   #   ports:
   #     - "3000:3000"
   #     - "4000:4000"  # Firebase emulator UI
   #   volumes:
-  #     - ./functions:/app
+  #     - ./backend:/app
   #     - /app/node_modules
   #   environment:
   #     - NODE_ENV=development

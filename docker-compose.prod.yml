@@ -46,7 +46,7 @@ services:
   # Placeholder för backend (Firebase Functions i produktion körs i molnet)
   # backend:
   #   build:
-  #     context: ./functions
+  #     context: ./backend
   #     dockerfile: Dockerfile
   #   container_name: ai-restaurant-backend-prod
   #   networks:
