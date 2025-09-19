@@ -67,8 +67,9 @@ npm run dev      # Starta utvecklingsserver för frontend på http://localhost:5
 # Mock Server (i /frontend mappen)
 npm run mock:server # Starta den lokala mock-API-servern för att simulera backend
 
-# Backend Development (i /functions mappen)
-npm install      # Installera backend-beroenden
+# Backend Development (i /backend mappen)
+pip install -r requirements.txt  # Installera backend-beroenden
+python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload  # Starta backend server
 firebase emulators:start # Starta lokal Firebase-emulator
 
 # Deployment
@@ -88,13 +89,11 @@ npm run lint         # Run ESLint
 npm run preview      # Preview production build
 ```
 
-### Backend Development (Firebase Functions)
+### Backend Development (Python FastAPI)
 ```bash
-cd functions
-npm install          # Install dependencies
-npm run build        # Compile TypeScript
-npm run serve        # Build and start Firebase emulators
-npm run deploy       # Deploy to Firebase (requires auth)
+cd backend
+pip install -r requirements.txt  # Install Python dependencies
+python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload  # Start backend server
 firebase emulators:start  # Start local Firebase emulator
 ```
 

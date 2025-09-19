@@ -86,7 +86,7 @@ Access the application at http://localhost:5173
 #### Backend Development
 
 ```bash
-cd functions
+cd backend
 npm install
 npm run serve  # Starts Firebase emulators
 ```
@@ -114,7 +114,7 @@ ai-restaurant/
 │   │   └── lib/          # Utilities
 │   ├── Dockerfile        # Multi-stage Docker build
 │   └── nginx.conf        # Nginx configuration
-├── functions/            # Firebase Cloud Functions
+├── backend/              # Firebase Cloud Functions
 │   ├── src/             # TypeScript source files
 │   └── lib/             # Compiled JavaScript
 ├── scripts/             # Utility scripts

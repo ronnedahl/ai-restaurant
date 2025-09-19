@@ -62,5 +62,5 @@ venv/
 *.egg-info/
 
 # Firebase service account keys (security)
-functions/ai-restaurant-*.json
-functions/firebase-service-account.json
+backend/ai-restaurant-*.json
+backend/firebase-service-account.json
