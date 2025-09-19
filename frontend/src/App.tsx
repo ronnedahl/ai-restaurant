@@ -19,14 +19,17 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-[#F7F9FC]">
-        <Header onOpenAI={handleOpenAI} />
-        {/* Add top padding to account for fixed header */}
-        <main className="pt-16">
-          <Routes>
-            <Route path="/" element={<Menu />} />
-            <Route path="/cart" element={<Cart />} />
-          </Routes>
-        </main>
+        {/* Main content with conditional blur */}
+        <div className={`transition-all duration-300 ${isAIAssistantOpen ? 'blur-sm' : ''}`}>
+          <Header onOpenAI={handleOpenAI} />
+          {/* Add top padding to account for fixed header */}
+          <main className="pt-16">
+            <Routes>
+              <Route path="/" element={<Menu />} />
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
+          </main>
+        </div>
         
         {/* AI Assistant Modal */}
         <AIAssistant 
