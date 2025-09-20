@@ -15,8 +15,7 @@ interface FilterOption {
 
 const FilterButtons: React.FC<FilterButtonsProps> = ({ 
   selectedFilter, 
-  onFilterChange,
-  availableTags = []
+  onFilterChange
 }) => {
   
   // Definiera filter-alternativ med ikoner

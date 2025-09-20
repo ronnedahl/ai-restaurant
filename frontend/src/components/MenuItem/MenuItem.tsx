@@ -8,16 +8,6 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ dish, onAddToCart }) => {
-  // Mappa allergener till svenska etiketter
-  const allergenLabels: Record<string, string> = {
-    'gluten': 'Gluten',
-    'laktos': 'Laktos',
-    'ägg': 'Ägg',
-    'fisk': 'Fisk',
-    'senap': 'Senap',
-    'glutenfri': 'Glutenfritt'
-  };
-
   // Mappa tags till etiketter och färger
   const getTagStyle = (tag: string): string => {
     const tagStyles: Record<string, string> = {
