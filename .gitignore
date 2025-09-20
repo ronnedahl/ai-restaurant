@@ -46,3 +46,21 @@ pubsub-debug.log
 
 # Firebase emulators
 firebase-export-*/
+
+# Cloned repositories - don't include external repos
+my-dev-portfolio-chatbot/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+*.egg-info/
+
+# Firebase service account keys (security)
+backend/ai-restaurant-*.json
+backend/firebase-service-account.json

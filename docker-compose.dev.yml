@@ -1,0 +1,52 @@
+# Docker Compose för utvecklingsmiljö
+version: '3.8'
+
+services:
+  # Frontend utvecklingsserver
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: ai-restaurant-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      # Bind mount för hot reload
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:3000
+    networks:
+      - ai-restaurant-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # Placeholder för backend (Firebase Functions emulator)
+  # backend-dev:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile.dev
+  #   container_name: ai-restaurant-backend-dev
+  #   ports:
+  #     - "3000:3000"
+  #     - "4000:4000"  # Firebase emulator UI
+  #   volumes:
+  #     - ./backend:/app
+  #     - /app/node_modules
+  #   environment:
+  #     - NODE_ENV=development
+  #   networks:
+  #     - ai-restaurant-network
+  #   restart: unless-stopped
+
+networks:
+  ai-restaurant-network:
+    driver: bridge
+    name: ai-restaurant-network
+
+volumes:
+  node_modules_frontend:
+    name: ai-restaurant-frontend-node-modules

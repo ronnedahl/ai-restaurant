@@ -1,9 +1,44 @@
-// Menu data for AI Restaurant
-const menuData = {
-    "restaurant": "AI Restaurang",
-    "currency": "SEK",
-    "last_updated": "2025-09-11",
-    "dishes": [
+// Mock API Service - simulates Firebase data fetching
+// Will be replaced with real Firebase calls in later sprints
+
+export interface Ingredient {
+  item: string;
+  amount: number;
+  unit: string;
+}
+
+export interface MenuItem {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  ingredients: Ingredient[];
+  allergens: string[];
+  priceSek: number;
+  imageUrl: string;
+  imageAlt: string;
+  tags: string[];
+}
+
+export interface Restaurant {
+  name: string;
+  currency: string;
+  lastUpdated: string;
+}
+
+export interface MenuData {
+  restaurant: Restaurant;
+  dishes: MenuItem[];
+}
+
+// Mock data - samma som vi laddat upp till Firestore
+const mockMenuData: MenuData = {
+  restaurant: {
+    name: "AI Restaurang",
+    currency: "SEK",
+    lastUpdated: "2025-09-11"
+  },
+ "dishes": [
         {
             "id": "SE-001",
             "name": "Köttbullar med potatismos och lingon",
@@ -300,4 +335,31 @@ const menuData = {
     ]
 };
 
-module.exports = menuData;
+// API-liknande funktioner för att hämta data
+export const mockApi = {
+  // Hämta all menydata
+  async getMenuData(): Promise<MenuData> {
+    // Simulera API-fördröjning
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return mockMenuData;
+  },
+
+  // Hämta specifik rätt
+  async getMenuItem(id: string): Promise<MenuItem | undefined> {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    return mockMenuData.dishes.find(dish => dish.id === id);
+  },
+
+  // Hämta rätter per kategori
+  async getMenuByCategory(category: string): Promise<MenuItem[]> {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    return mockMenuData.dishes.filter(dish => dish.category === category);
+  },
+
+  // Hämta unika kategorier
+  async getCategories(): Promise<string[]> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const categories = [...new Set(mockMenuData.dishes.map(dish => dish.category))];
+    return categories;
+  }
+};
