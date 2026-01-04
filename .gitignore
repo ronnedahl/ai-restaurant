@@ -64,3 +64,6 @@ venv/
 # Firebase service account keys (security)
 backend/ai-restaurant-*.json
 backend/firebase-service-account.json
+
+# Claude Code
+.claude/
