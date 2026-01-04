@@ -1,143 +1,118 @@
-CLAUDE.md
+# CLAUDE.md
 
-Denna fil ger vägledning till Claude Code (claude.ai/code) när du arbetar med kod i detta repository.
-Project Overview
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Projektidé: AI-meny & beställningsassistent för en restaurangwebbplats.
+## Project Overview
 
+AI-powered restaurant application with a **React frontend** and **FastAPI + LangChain backend** using Firebase Firestore for data storage. Features an AI assistant for menu inquiries, recommendations, and order assistance.
 
-Ett live-widget (webb/PWA) där användaren kan:
+**Stack:**
+- Frontend: React 19 + TypeScript + Vite + Tailwind CSS v4 + shadcn/ui
+- Backend: Python 3.11+ + FastAPI + LangChain + Firebase Admin SDK
 
-    Ställa frågor om rätter, allergener och dagens rätt.
+## Development Commands
 
-    Få personliga rekommendationer (“glutenfritt under 120 kr, gärna fisk”).
+### Frontend
 
-    Lägga varor i varukorg via AI-anrop (tool-calls).
-
-    Kolla beställningsstatus (“var är min order?”).
-
-    Eskalera till en människa vid behov.
-
-Grundprincip: Vi bygger denna applikation gren för gren, i en serie av små, hanterbara steg. Jag är en junior utvecklare och behöver att du agerar som min guide och bryter ner problem i minsta möjliga delar.
-
-## Our Workflow:
-
-    Jag definierar målet: Jag börjar med att skapa en ny Git-gren och berättar för dig det övergripande målet för den specifika grenen.
-
-    Du föreslår det första steget: Du föreslår sedan det allra första, lilla och logiska steget för att uppnå målet.
-
-    Jag godkänner: Jag säger "Ja" eller "Okej" för att godkänna ditt förslag.
-
-    Du skriver koden: När jag har godkänt, ger du mig koden för endast det enskilda steget.
-
-    Du föreslår nästa steg: Efter att ha skrivit koden, föreslår du omedelbart nästa lilla steg.
-
-    Vi upprepar: Vi fortsätter denna loop tills målet för grenen är uppfyllt.
-
-## Huvudregel: 
-
-Skriv inte all kod på en gång. Din roll är att guida mig ett steg i taget. Jag meddelar dig när målet för grenen är uppnått.
-The Slice Plan (Our Project Roadmap)
-
-Här är den övergripande planen vi kommer att följa, slice för slice. Varje slice kommer att ha sin egen Git-gren.
-
-    Slice 0: Projektets Grundstomme. Sätta upp Git, Firebase (Firestore, Functions, Hosting) och en minimal React-app. Installera och konfigurera shadcn/ui.
-
-    Slice 1: Visa en Statisk Meny. Skapa menysidan som hämtar och visar data från vår Mock API Server. Bygg UI med shadcn/ui-komponenter.
-
-    Slice 2: Grundläggande Varukorgsfunktion. Implementera CartContext och koppla "Add"-knapparna.
-
-    Slice 3: Bygg Varukorgsvyn. Skapa sidan som visar innehållet från CartContext med shadcn/ui-komponenter.
-
-    Slice 4: AI-assistentens Gränssnitt (UI). Bygga ett chattfönster med shadcn/ui-komponenter.
-
-    Slice 5: Koppla på AI för Frågor & Svar. Byt ut anropen från Mock API Server till den riktiga Firebase Cloud Function.
-
-Essential Commands
-code Bash
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-
-    
-# Frontend Development (i /frontend mappen)
-npm install      # Installera frontend-beroenden
-npm run dev      # Starta utvecklingsserver för frontend på http://localhost:5173
-
-## NYTT/UPPDATERAT ##
-# Mock Server (i /frontend mappen)
-npm run mock:server # Starta den lokala mock-API-servern för att simulera backend
-
-# Backend Development (i /backend mappen)
-pip install -r requirements.txt  # Installera backend-beroenden
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload  # Starta backend server
-firebase emulators:start # Starta lokal Firebase-emulator
-
-# Deployment
-firebase deploy
-=======
-AI-powered restaurant menu & ordering assistant - A React/Firebase application where users can browse dishes, manage cart, and interact with an AI assistant for personalized recommendations and ordering support.
-
-## Essential Commands
-
-### Frontend Development
 ```bash
 cd frontend
-npm install          # Install dependencies
-npm run dev          # Start dev server (http://localhost:5173)
-npm run build        # Build for production
-npm run lint         # Run ESLint
-npm run preview      # Preview production build
+npm install && npm run dev    # Start dev server on http://localhost:5173
+npm run build                 # TypeScript check + Vite production build
+npm run lint                  # ESLint
 ```
 
-### Backend Development (Python FastAPI)
+### Backend
+
 ```bash
 cd backend
-pip install -r requirements.txt  # Install Python dependencies
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload  # Start backend server
-firebase emulators:start  # Start local Firebase emulator
+python3 -m venv .venv
+source .venv/bin/activate     # Linux/Mac
+pip install -r requirements.txt
+python -m uvicorn src.main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
 ### Data Management
+
 ```bash
-cd scripts
-npm install          # Install script dependencies
-npm run upload       # Upload menu data to Firestore
-npm run delete       # Delete menu data from Firestore
+cd scripts && npm install
+npm run upload    # Upload menu data to Firestore
+npm run delete    # Delete menu data from Firestore
 ```
 
-### Docker Development
-```bash
-# Development environment with hot reload
-docker-compose -f docker-compose.dev.yml up frontend-dev
+## Architecture
 
-# Production test environment with Nginx
-docker-compose -f docker-compose.prod.yml up --build
+### Backend Architecture
+
+**Request Flow** (`/chat` endpoint):
 ```
- 
+Request → Quick Response Check → Cache Check → RestaurantAgent → Response
+```
 
-  
+**Core Components:**
 
-Architecture Overview
-Technology Stack
+1. **RestaurantAgent** (`src/core/restaurant_agent.py`):
+   - Main AI agent using LangChain's `ChatOpenAI`
+   - Intent detection for menu, allergens, pricing, ordering, human support
+   - Fetches live menu data from Firebase as context
 
-    Frontend: React (med Vite) & TypeScript
+2. **Services Layer** (`src/services/`):
+   - `menu_service.py`: Fetches menu items from Firestore
+   - `firebase_vector_store.py`: Vector storage with cosine similarity search
+   - `embeddings.py`: OpenAI embeddings
 
-    Backend: Node.js i Firebase Cloud Functions
+3. **Optimization Layer**:
+   - `utils/quick_responses.py`: Pattern-matched instant responses
+   - `utils/cache.py`: Response caching with TTL (300s default)
 
-    Databas: Firestore (NoSQL-databas)
+### API Routes (`backend/src/api/routes/`)
 
-    Hosting: Firebase Hosting
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/chat/` | POST | Main chat endpoint with caching |
+| `/health` | GET | Health check |
 
-    Styling: Tailwind CSS
+### Frontend Architecture
 
-## NYTT/UPPDATERAT ##
+- **State**: React Context API (`CartContext` for cart state)
+- **API**: `chatApi.ts` singleton service calls backend at `VITE_API_BASE_URL`
+- **UI**: shadcn/ui components with Tailwind CSS v4
 
-    UI Components: shadcn/ui (byggt på Radix UI & Tailwind CSS). Vi kommer att använda detta för alla UI-element som knappar, dialogrutor och kort.
+## Environment Variables
 
-    AI Integration: Google Gemini API (eller liknande)
+**Backend** (`backend/.env`):
+```env
+OPENAI_API_KEY=sk-...
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxx@project.iam.gserviceaccount.com
+API_KEY=your-api-key
+API_PORT=8001
+```
 
-Core Architecture Patterns
+**Frontend** (`frontend/.env`):
+```env
+VITE_API_BASE_URL=/api
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_PROJECT_ID=...
+```
 
-    Backend as an API: Firebase Cloud Functions fungerar som våra serverlösa API-endpoints.
+## Production Deployment
 
+**Server setup (VPS with Nginx + PM2):**
 
+```bash
+# Backend runs via PM2
+pm2 start .venv/bin/python --name ai-restaurant-backend -- -m uvicorn src.main:app --host 0.0.0.0 --port 8001
+
+# Nginx proxies /api/ to backend
+location /api/ {
+    proxy_pass http://localhost:8001/;
+}
+```
+
+## Common Pitfalls
+
+1. **Firebase Private Key**: Must have literal `\n` characters, not `\\n` escape sequences
+2. **CORS**: Add new frontend origins to `allow_origins` list in `src/main.py`
+3. **Ports**: Backend=8001, Frontend dev=5173
+4. **Python**: Requires 3.11+ for typing support
